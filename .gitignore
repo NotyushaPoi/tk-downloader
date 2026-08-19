@@ -5,5 +5,10 @@ __pycache__/
 /.idea/
 /.run/
 /Volume/
+/webui/dist/
+/webui/node_modules/
+/webui/*.tsbuildinfo
+/webui/vite.config.js
+/webui/vite.config.d.ts
 !/.github/
 .DS_Store
