@@ -2,20 +2,22 @@ from json import JSONDecodeError, dump, load
 from pathlib import Path
 
 from src.config import Settings
-from src.custom import PROJECT_ROOT
 from src.module import Cookie
 from src.tools import Cleaner, ColorfulConsole
 
+WEBUI_VOLUME = Path(__file__).resolve().parents[2].joinpath("Volume")
+WEBUI_VOLUME.mkdir(exist_ok=True)
+
 
 class WebUIConfig:
-    FILE = PROJECT_ROOT.joinpath("webui.json")
+    FILE = WEBUI_VOLUME.joinpath("webui.json")
     RELEASE_SETTINGS = Path.home().joinpath(
         "tk-downloader", "_internal", "Volume", "settings.json"
     )
 
     def __init__(self, console: ColorfulConsole | None = None):
         self.console = console or ColorfulConsole(debug=False)
-        self.settings = Settings(PROJECT_ROOT, self.console)
+        self.settings = Settings(WEBUI_VOLUME, self.console)
         self.cookie = Cookie(self.settings, self.console)
         self.cleaner = Cleaner()
         self._cookie_source = "current"

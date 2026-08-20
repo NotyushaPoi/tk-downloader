@@ -6,7 +6,7 @@ import pytest
 from httpx import AsyncClient, MockTransport, Response
 
 from src.tools import Cleaner
-from src.webui.config import WebUIConfig
+from src.webui.config import WEBUI_VOLUME, WebUIConfig
 from src.webui.jobs import JobManager
 from src.webui.models import CreateJobRequest
 from src.webui.runtime import ResolvedVideo, UnsupportedWorkTypeError
@@ -64,6 +64,13 @@ async def wait_for_job(manager: JobManager, job_id: str):
             return job
         await asyncio.sleep(0.01)
     raise AssertionError("任务未在测试时间内完成")
+
+
+def test_webui_volume_is_resolved_without_upstream_project_root():
+    expected = Path(__file__).resolve().parents[2].joinpath("Volume")
+
+    assert WEBUI_VOLUME == expected
+    assert WebUIConfig.FILE == expected.joinpath("webui.json")
 
 
 @pytest.mark.asyncio
