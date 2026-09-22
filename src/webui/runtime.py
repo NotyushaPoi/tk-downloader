@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from src.config import Parameter
 from src.extract import Extractor as DataExtractor
-from src.interface import API, Detail
+from src.interface import API
 from src.link import Extractor as LinkExtractor
 from src.manager import Database, DownloadRecorder
 from src.module import Cookie
@@ -10,6 +10,7 @@ from src.record import BaseLogger
 from src.translation import _
 
 from .config import WebUIConfig
+from .detail import fetch_detail
 
 
 class NoopRecord:
@@ -86,9 +87,7 @@ class DownloadRuntime:
         if len(unique_ids) != 1:
             raise ValueError("一个输入框只能包含一个抖音视频")
         work_id = unique_ids[0]
-        raw = await Detail(self.parameter, detail_id=work_id).run()
-        if not raw:
-            raise ValueError("无法获取视频详情，请检查 Cookie 或链接")
+        raw = await fetch_detail(self.parameter, work_id)
         extracted = await self.extractor.run([raw], NoopRecord())
         if len(extracted) != 1:
             raise ValueError("视频详情解析失败")
